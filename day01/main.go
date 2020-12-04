@@ -23,12 +23,14 @@ func main() {
 		intVals = append(intVals, intVal)
 	}
 
-	answer := day01(intVals)
+	answerPart1 := day01Part1(intVals)
+	log.Printf("The answer for part 1 is: %d\n", answerPart1)
 
-	log.Printf("The answer is: %d\n", answer)
+	answerPart2 := day01Part2(intVals)
+	log.Printf("The answer for part 2 is: %d\n", answerPart2)
 }
 
-func day01(in []int) int {
+func day01Part1(in []int) int {
 	for i := range in {
 		for j := 0; j < len(in); j++ {
 			if i == j {
@@ -36,6 +38,28 @@ func day01(in []int) int {
 			}
 			if in[i]+in[j] == 2020 {
 				return in[i] * in[j]
+			}
+		}
+	}
+	return 0
+}
+
+func day01Part2(in []int) int {
+	for i := range in {
+		for j := 0; j < len(in); j++ {
+			if i == j {
+				continue
+			}
+			for k := 0; k < len(in); k++ {
+				if i == k {
+					continue
+				}
+				if j == k {
+					continue
+				}
+				if in[i]+in[j]+in[k] == 2020 {
+					return in[i] * in[j] * in[k]
+				}
 			}
 		}
 	}
