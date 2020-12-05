@@ -6,11 +6,6 @@ import (
 	"strings"
 )
 
-const (
-	dX = 3
-	dY = 1
-)
-
 func main() {
 	content, err := ioutil.ReadFile("input.txt")
 	if err != nil {
@@ -18,11 +13,57 @@ func main() {
 	}
 	treeMap := strings.Split(string(content), "\n")
 
-	answer := day03(treeMap)
-	log.Printf("The answer is %d", answer)
+	answerPart1 := day03Part1(treeMap)
+	log.Printf("The answer for part 1 is %d", answerPart1)
+
+	answerPart2 := day03Part2(treeMap)
+	log.Printf("The answer for part 2 is %d", answerPart2)
 }
 
-func day03(treeMap []string) int {
+type slope struct {
+	dX, dY int
+}
+
+func day03Part1(treeMap []string) int {
+	return encounteredTrees(treeMap, slope{
+		dX: 3,
+		dY: 1,
+	})
+}
+
+func day03Part2(treeMap []string) int {
+	slopes := []slope{
+		slope{
+			dX: 1,
+			dY: 1,
+		},
+		slope{
+			dX: 3,
+			dY: 1,
+		},
+		slope{
+			dX: 5,
+			dY: 1,
+		},
+		slope{
+			dX: 7,
+			dY: 1,
+		},
+		slope{
+			dX: 1,
+			dY: 2,
+		},
+	}
+
+	multiTree := 1
+	for _, slope := range slopes {
+		treeCount := encounteredTrees(treeMap, slope)
+		multiTree = multiTree * treeCount
+	}
+	return multiTree
+}
+
+func encounteredTrees(treeMap []string, s slope) int {
 	var i, j int
 	var treeCount int
 	for n := 0; n < len(treeMap); n++ {
@@ -30,8 +71,8 @@ func day03(treeMap []string) int {
 		if string(pos) == "#" {
 			treeCount++
 		}
-		i = i + dX
-		j = j + dY
+		i = i + s.dX
+		j = j + s.dY
 		if i >= len(treeMap[0]) {
 			i = i - len(treeMap[0])
 		}
