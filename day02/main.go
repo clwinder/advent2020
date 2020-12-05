@@ -23,8 +23,11 @@ func main() {
 		passwords = append(passwords, password)
 	}
 
-	day02Answer := day02(passwords)
-	log.Printf("The answer is: %d", day02Answer)
+	day02Part1Answer := day02Part1(passwords)
+	log.Printf("The answer for part 1 is: %d", day02Part1Answer)
+
+	day02Part2Answer := day02Part2(passwords)
+	log.Printf("The answer for part 2 is: %d", day02Part2Answer)
 }
 
 type passwordValidation struct {
@@ -57,17 +60,17 @@ func getPasswordValidationFromRow(row string) (passwordValidation, error) {
 	return password, nil
 }
 
-func day02(in []passwordValidation) int {
+func day02Part1(in []passwordValidation) int {
 	var validPasswordCount int
 	for _, p := range in {
-		if validatePassword(p) {
+		if validatePasswordPart1(p) {
 			validPasswordCount++
 		}
 	}
 	return validPasswordCount
 }
 
-func validatePassword(in passwordValidation) bool {
+func validatePasswordPart1(in passwordValidation) bool {
 	var validCharCount int
 	for _, passChar := range in.password {
 		if string(passChar) == in.char {
@@ -75,4 +78,23 @@ func validatePassword(in passwordValidation) bool {
 		}
 	}
 	return in.min <= validCharCount && validCharCount <= in.max
+}
+
+func day02Part2(in []passwordValidation) int {
+	var validPasswordCount int
+	for _, p := range in {
+		if validatePasswordPart2(p) {
+			validPasswordCount++
+		}
+	}
+	return validPasswordCount
+}
+
+func validatePasswordPart2(in passwordValidation) bool {
+	firstMatch := string(in.password[in.min-1]) == in.char
+	secondMatch := string(in.password[in.max-1]) == in.char
+	if firstMatch != secondMatch {
+		return true
+	}
+	return false
 }

@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func Test_day02(t *testing.T) {
+func Test_day02Part1(t *testing.T) {
 	in := []passwordValidation{
 		passwordValidation{
 			min:      1,
@@ -25,7 +25,36 @@ func Test_day02(t *testing.T) {
 	}
 	expected := 2
 
-	actual := day02(in)
+	actual := day02Part1(in)
+	if actual != expected {
+		t.Errorf("Expected %d, got %d instead", expected, actual)
+	}
+}
+
+func Test_day02Part2(t *testing.T) {
+	in := []passwordValidation{
+		passwordValidation{
+			min:      1,
+			max:      3,
+			char:     "a",
+			password: "abcde",
+		},
+		passwordValidation{
+			min:      1,
+			max:      3,
+			char:     "b",
+			password: "cdefg",
+		},
+		passwordValidation{
+			min:      2,
+			max:      9,
+			char:     "c",
+			password: "ccccccccc",
+		},
+	}
+	expected := 1
+
+	actual := day02Part2(in)
 	if actual != expected {
 		t.Errorf("Expected %d, got %d instead", expected, actual)
 	}
