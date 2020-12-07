@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
+	"sort"
 	"strings"
 )
 
@@ -18,11 +20,17 @@ func main() {
 	}
 	boardingPasses := strings.Split(string(content), "\n")
 
-	answer := day05(boardingPasses)
-	log.Printf("The answer is %d", answer)
+	answerPart1 := day05Part1(boardingPasses)
+	log.Printf("The answer for part 1 is %d", answerPart1)
+
+	answerPart2, err := day05Part2(boardingPasses)
+	if err != nil {
+		log.Fatalf("Failed to find answer to part 2: %s", err)
+	}
+	log.Printf("The answer for part 2 is %d", answerPart2)
 }
 
-func day05(boardingPasses []string) int {
+func day05Part1(boardingPasses []string) int {
 	var maxID int
 	for _, b := range boardingPasses {
 		id := getSeatIDFromBoardingPass(b)
@@ -31,6 +39,25 @@ func day05(boardingPasses []string) int {
 		}
 	}
 	return maxID
+}
+
+func day05Part2(boardingPasses []string) (int, error) {
+	seatIDs := make([]int, 0, len(boardingPasses))
+	for _, b := range boardingPasses {
+		seatIDs = append(seatIDs, getSeatIDFromBoardingPass(b))
+	}
+	sort.Ints(seatIDs)
+
+	var mySeatIDs []int
+	for i := 1; i < len(seatIDs)-1; i++ {
+		if seatIDs[i-1] == seatIDs[i]-2 {
+			mySeatIDs = append(mySeatIDs, seatIDs[i]-1)
+		}
+	}
+	if len(mySeatIDs) != 1 {
+		return 0, fmt.Errorf("failed to find my seat, got %d options", len(mySeatIDs))
+	}
+	return mySeatIDs[0], nil
 }
 
 func getSeatIDFromBoardingPass(boardingPass string) int {
